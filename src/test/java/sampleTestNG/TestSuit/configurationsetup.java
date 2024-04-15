@@ -21,11 +21,6 @@ import org.testng.annotations.Parameters;
 
 public class configurationsetup implements ITestListener{
 	public static WebDriver driver;
-	String UserNameOfOrangeHRM="//input[@name='username']";
-	String PasswordOfOrangeHRM="//div[@class='oxd-form-row']//following::input[@name='password']";
-	String LoginButtonOrangeHRM="//button[@type='submit']";
-	String sideNavigationBarRightSide="//*[@class='oxd-icon bi-chevron-right']";
-	String sideNavigationBarLeftSide="//*[@class='oxd-icon bi-chevron-left']";
 
 	@BeforeClass
 	public WebDriver getDriver() throws Exception{
@@ -50,17 +45,17 @@ public class configurationsetup implements ITestListener{
 	}
 	public void AddConfiguration(String username,String password)  throws Exception {
 		System.out.println("Message from config class......");
-		WebElement usernameField = driver.findElement(By.xpath(UserNameOfOrangeHRM));
-		WebElement passwordField = driver.findElement(By.xpath(PasswordOfOrangeHRM));
+		WebElement usernameField = driver.findElement(By.xpath(OrangeHRMPIMElementLocators.UserNameOfOrangeHRM));
+		WebElement passwordField = driver.findElement(By.xpath(OrangeHRMPIMElementLocators.PasswordOfOrangeHRM));
 		usernameField.sendKeys(username);
 		passwordField.sendKeys(password);
-		driver.findElement(By.xpath(LoginButtonOrangeHRM)).click();
+		driver.findElement(By.xpath(OrangeHRMPIMElementLocators.LoginButtonOrangeHRM)).click();
 		Thread.sleep(5000);
 		SoftAssertions softAssertions = new SoftAssertions();
 		softAssertions.assertThat("OrangeHRM").isEqualTo(driver.getTitle(),"Not matching");
 
 		// Find the button element using findElements (no exception thrown if not found)
-		List<WebElement> buttonElementsLeft= driver.findElements(By.xpath(sideNavigationBarLeftSide));
+		List<WebElement> buttonElementsLeft= driver.findElements(By.xpath(OrangeHRMPIMElementLocators.sideNavigationBarLeftSide));
 		// Check if any button elements were found
 		if (!buttonElementsLeft.isEmpty()) {
 			// Get the first button element from the list
@@ -78,7 +73,7 @@ public class configurationsetup implements ITestListener{
 		} else {
 			// Button element is not found, handle the case appropriately
 			System.out.println("Button element not found on the page.");
-			List<WebElement> buttonElementRight = driver.findElements(By.xpath(sideNavigationBarRightSide));
+			List<WebElement> buttonElementRight = driver.findElements(By.xpath(OrangeHRMPIMElementLocators.sideNavigationBarRightSide));
 			WebElement buttonElement = buttonElementRight.get(0);
 			buttonElement.click();
 			// Perform alternative action or log a message

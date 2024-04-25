@@ -2,6 +2,9 @@ package sampleTestNG.TestSuit;
 
 import org.testng.annotations.Test;
 
+import com.aventstack.extentreports.Status;
+
+import ReportGeneration.ReportGenerationClass;
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 import java.util.List;
@@ -13,7 +16,9 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.ITestContext;
 import org.testng.ITestListener;
+import org.testng.ITestResult;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeSuite;
@@ -21,7 +26,7 @@ import org.testng.annotations.Parameters;
 
 public class configurationsetup implements ITestListener{
 	public static WebDriver driver;
-
+	ReportGenerationClass reportGeneration = new ReportGenerationClass();
 	@BeforeClass
 	public WebDriver getDriver() throws Exception{
 		WebDriverManager.chromedriver().setup();
@@ -30,15 +35,19 @@ public class configurationsetup implements ITestListener{
 		driver.manage().window().maximize();
 		return driver;
 	}
+
 	public void loadUrl() throws Exception {
 		System.out.println("Message from config class......");
 		// Navigate to the URL
+
 		driver.get("https://opensource-demo.orangehrmlive.com/web/index.php/dashboard/index");
 		System.out.println("Title of the page is " + driver.getTitle());
+
 		Thread.sleep(5000);
 		// Call AddConfiguration method after loading URL
 		try {
 			AddConfiguration("Admin", "admin123"); 
+
 		} catch (CredentialException e) {
 			e.printStackTrace();
 		}
@@ -49,10 +58,13 @@ public class configurationsetup implements ITestListener{
 		WebElement passwordField = driver.findElement(By.xpath(OrangeHRMPIMElementLocators.PasswordOfOrangeHRM));
 		usernameField.sendKeys(username);
 		passwordField.sendKeys(password);
+
 		driver.findElement(By.xpath(OrangeHRMPIMElementLocators.LoginButtonOrangeHRM)).click();
+
 		Thread.sleep(5000);
 		SoftAssertions softAssertions = new SoftAssertions();
 		softAssertions.assertThat("OrangeHRM").isEqualTo(driver.getTitle(),"Not matching");
+
 
 		// Find the button element using findElements (no exception thrown if not found)
 		List<WebElement> buttonElementsLeft= driver.findElements(By.xpath(OrangeHRMPIMElementLocators.sideNavigationBarLeftSide));
@@ -80,9 +92,38 @@ public class configurationsetup implements ITestListener{
 		}
 		softAssertions.assertAll(); // All soft assertions are evaluated here
 
+
 	}
 	public void ExitBrowser() {
 		driver.close();
+	}
+	public void onFinish(ITestContext arg0) {
+		// TODO Auto-generated method stub
+
+	}
+	public void onStart(ITestContext arg0) {
+		// TODO Auto-generated method stub
+
+	}
+	public void onTestFailedButWithinSuccessPercentage(ITestResult arg0) {
+		// TODO Auto-generated method stub
+
+	}
+	public void onTestFailure(ITestResult arg0) {
+		// TODO Auto-generated method stub
+
+	}
+	public void onTestSkipped(ITestResult arg0) {
+		// TODO Auto-generated method stub
+
+	}
+	public void onTestStart(ITestResult arg0) {
+		// TODO Auto-generated method stub
+
+	}
+	public void onTestSuccess(ITestResult arg0) {
+		// TODO Auto-generated method stub
+
 	}
 
 

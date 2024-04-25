@@ -5,6 +5,7 @@
 		<!-- Specify the correct package and class name of your listener -->
 		<listener
 			class-name="GlobalexceptionHandler.GlobalExceptionHandler" />
+			<listener class-name="ReusableMethods.ITestListnerClass"/>
 		<listener
 			class-name="sampleTestNG.TestSuit.configurationsetup" />
 	</listeners>
@@ -12,7 +13,6 @@
 	<test thread-count="5" name="OrangeHRMLogin">
 		<parameter name="username" value="Admin" />
 		<parameter name="password" value="admin123" />
-
 		<classes>
 			<class name="sampleTestNG.TestSuit.FirstTest">
 				<methods>

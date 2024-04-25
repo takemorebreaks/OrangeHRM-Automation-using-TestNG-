@@ -8,27 +8,43 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
+
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.MediaEntityBuilder;
+import com.aventstack.extentreports.Status;
+import com.aventstack.extentreports.reporter.ExtentReporter;
+import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 
 import GlobalexceptionHandler.NoSuchElementException;
 import GlobalexceptionHandler.TimeOutExceptionoccured;
 import ModelclassForDataStoring.EmployeeList;
+import ReportGeneration.ReportGenerationClass;
 import ReusableMethods.DropDownListOptionSelection;
+import ReusableMethods.ITestListnerClass;
 import ReusableMethods.SelectNavigationBarOption;
+import ReusableMethods.TakeScreenShotClass;
+
 import java.time.Duration;
 import java.util.ArrayList;
+@Listeners(ITestListnerClass.class)
 public class PIMmodulePositiveTestCase{
 
 	boolean SearchResult=false;
 	SoftAssert softAssert = new SoftAssert();
-	public WebDriver driver;
+	public WebDriver driver; 
 	DropDownListOptionSelection dropDownSelection = 	new DropDownListOptionSelection();
+	public ReportGenerationClass reportGeneration = new ReportGenerationClass();
 	List<Object> TrailList = new ArrayList<Object>();
 	SelectNavigationBarOption navigationBarOption= new SelectNavigationBarOption();
 	WebDriverWait driverWait = new WebDriverWait(driver,Duration.ofSeconds(10));
 	WebDriverWait wait = new WebDriverWait(driver,Duration.ofSeconds(15));
+	TakeScreenShotClass screenShotClass = new TakeScreenShotClass(driver);
 
 	@BeforeClass 
 	public void LoadApplication() throws Exception  {
@@ -36,22 +52,30 @@ public class PIMmodulePositiveTestCase{
 		configurationsetup.loadUrl();
 		driver = configurationsetup.driver;
 		navigationBarOption.SelectSideNavOption("viewPimModule");
+	    // Initialize WebDriver and other setup
+		reportGeneration.initializeReports(null); // Provide a file path if necessary, otherwise use default
 		Thread.sleep(5000);
+		
 	}
-	//	@AfterClass
-	//	public void AfterTestCompletion() throws Exception {
-	//		configurationsetup.ExitBrowser();
-	//	}
+	  @AfterClass
+	    public void tearDown() {
+	        // Clean up WebDriver and other teardown
+		  reportGeneration.flushReports();
+	    }
 
-	@Test(enabled = true,priority = 1)
-	public void AddNewEmployee() throws InterruptedException {		
+
+	@Test(testName = "AddNewEmployee",enabled = true,alwaysRun = true)
+	public void AddNewEmployee() throws InterruptedException {	
+		ExtentTest  test1 = reportGeneration.createTest("AddNewEmployee");
 		navigationBarOption.SelectTopNavOption("Add Employee");
+        test1.log(Status.PASS, "Navigated to add employee Screen");
 		List<WebElement>UserNameielement=new ArrayList<WebElement>();
 		UserNameielement= driver.findElements(By.xpath(OrangeHRMPIMElementLocators.UserNameTextBox));
+
 		if(!UserNameielement.isEmpty()) {
 			WebElement UserNameIElement = UserNameielement.get(0);
 			if(UserNameIElement.isDisplayed()) {
-				Fillalluserdetails();
+				Fillalluserdetails(test1);
 			}
 		}
 		else {
@@ -59,46 +83,65 @@ public class PIMmodulePositiveTestCase{
 				//driver.findElement(By.xpath(CheckBox)).click();
 				WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
 				WebElement CheckBoxElement=wait.until(ExpectedConditions.elementToBeClickable(By.xpath(OrangeHRMPIMElementLocators.CheckBox)));
-				CheckBoxElement.click();
+				CheckBoxElement.click();  
+				 test1.log(Status.PASS, "Clicked CheckBox");
 				Thread.sleep(2000);
-				Fillalluserdetails();
-				Thread.sleep(8000);
+				Fillalluserdetails(test1);
+				Thread.sleep(5000);
 			}
 			catch(ElementNotInteractableException e){
 				throw new ElementNotInteractableException("Element not interacting..."+e.getMessage());
 			}
 		}
+
 	}
 
 
-
-	private void Fillalluserdetails() throws InterruptedException, NoSuchElementException {
+	private void Fillalluserdetails(ExtentTest test) throws InterruptedException, NoSuchElementException {
 		try {
 
 			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
 
 			WebElement firstNameElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(OrangeHRMPIMElementLocators.FirstNameTextBox)));
 			firstNameElement.sendKeys(OrangeHRMPIMTestData.FirstName);
-
+			test.log(Status.PASS, "User can Enter FirstName inside FirstName textbox");
+            
 			WebElement lastNameElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(OrangeHRMPIMElementLocators.LastNameTextBox)));
 			lastNameElement.sendKeys(OrangeHRMPIMTestData.LastName);
+			test.log(Status.PASS, "User can Enter LastName inside LastName textbox");    
 
 			WebElement employeeIdElement = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(OrangeHRMPIMElementLocators.EmployeeIdTextBox)));
 			employeeIdElement.sendKeys(Keys.CONTROL + "a"); // Select all text in the input field
 			employeeIdElement.sendKeys(Keys.DELETE); // Delete the selected text
 			employeeIdElement.sendKeys(OrangeHRMPIMTestData.EmployeeId);
+			test.log(Status.PASS, "User can Enter EmployeeId inside EmployeeId textbox");    
 
 			WebElement userNameElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(OrangeHRMPIMElementLocators.UserNameTextBox)));
 			userNameElement.sendKeys(OrangeHRMPIMTestData.UserName);
-
+			test.log(Status.PASS, "User can Enter UserName inside UserName textbox");  
+			test.log(Status.PASS,"helloo",screenShotClass.captureScreenshot(null));
 			WebElement passwordElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(OrangeHRMPIMElementLocators.PasswordTextBox)));
 			passwordElement.sendKeys(OrangeHRMPIMTestData.Password);
+		    String ActualResult = passwordElement.getAttribute("value");
+			String ExpectedResult = OrangeHRMPIMTestData.Password;
+			if (ActualResult.equals(ExpectedResult)) {
+			    test.log(Status.PASS, "Password entered successfully in Confirm Password textbox");
+			} else {
+			    test.log(Status.FAIL, "Password entered in Confirm Password textbox does not match the expected value");
+			}
 
 			WebElement confirmPasswordElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(OrangeHRMPIMElementLocators.ConfirmPasswordTextBox)));
 			confirmPasswordElement.sendKeys(OrangeHRMPIMTestData.Password);
+			test.log(Status.PASS, "User can ReEnter Password inside confirmPassword textbox");    
 
 			WebElement saveButtonElement = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(OrangeHRMPIMElementLocators.SaveButton)));
-			saveButtonElement.click();
+			if (saveButtonElement.isEnabled()) {
+			    saveButtonElement.click();
+			    test.log(Status.PASS, "User can click save button");
+			} else {
+			    test.log(Status.FAIL, "Save button is not clickable");
+			} 
+
 		} catch (TimeOutExceptionoccured e) {
 			throw new NoSuchElementException("Timeout waiting for element: " + e.getMessage());
 		}
@@ -106,8 +149,10 @@ public class PIMmodulePositiveTestCase{
 	@Test(enabled = false)
 	private void EmployeeInfoSearch() throws InterruptedException,NoSuchElementException {
 		try {
-			navigationBarOption.SelectTopNavOption("Employee List");
-
+//			navigationBarOption.SelectTopNavOption("Employee List");
+//			ExtentTest Test2=extentReports.createTest("Test2");
+			ExtentTest  test2 = reportGeneration.createTest("EmployeeInfoSearch");
+			test2.log(Status.FAIL, "Test2");
 			WebElement EmpInfoPageEmployeeNameText = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(OrangeHRMPIMElementLocators.EmployeeName))); 
 			EmpInfoPageEmployeeNameText.sendKeys(OrangeHRMPIMTestData.FirstName);
 			Thread.sleep(5000);
@@ -160,8 +205,11 @@ public class PIMmodulePositiveTestCase{
 	}
 	@Test(enabled = true,priority = 2)
 	private void EmployeeListTableDataStoring() throws InterruptedException,NoSuchElementException {
-		try {
+		ExtentTest  test3 = reportGeneration.createTest("EmployeeListTableDataStoring");
+		try {	
+//			ExtentTest Test3=extentReports.createTest("Test3");
 			navigationBarOption.SelectTopNavOption("Employee List");
+			test3.log(Status.PASS,"User Navigated to Employee List Window");
 			Thread.sleep(2000);
 			// Locate the row containing the column headers
 			WebElement columnHeaderRow = driver.findElement(By.xpath(OrangeHRMPIMElementLocators.TableEmployeeListHeadLine));
@@ -173,8 +221,7 @@ public class PIMmodulePositiveTestCase{
 
 			// Create a list to store the column headers
 			List<String> columnHeaders = new ArrayList<String>();
-			List<String> columnRowData = new ArrayList<String>();
-
+		
 			// Iterate through each column header element and extract the text
 			for (WebElement columnHeaderElement : columnHeaderElements) {
 				String columnHeaderText = columnHeaderElement.getText();
@@ -237,10 +284,12 @@ public class PIMmodulePositiveTestCase{
 					break;
 				}
 			}
+			test3.log(Status.PASS, "Matching option found");
 			softAssert.assertEquals(SearchResult, true);
 			softAssert.assertAll(); // This line will mark the test as failed if any soft assert has failed	    		
 		}
 		catch(NoSuchElementException e) {
+			test3.log(Status.FAIL, "No option matching with expected result");
 			throw new NoSuchElementException("Element not found..."+e.getMessage());
 		}
 
@@ -275,4 +324,5 @@ public class PIMmodulePositiveTestCase{
 		}
 
 	}
+
 }

@@ -3,11 +3,9 @@ package sampleTestNG.TestSuit;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
 import ReusableMethods.SelectNavigationBarOption;
-
 public class PIMmoduleNegativeTestCase {
-	public WebDriver driver;
+	public WebDriver driver; 
 @BeforeClass
 private void SetUp() throws Exception {
 	PIMmodulePositiveTestCase piMmodulePositiveTestCase = new PIMmodulePositiveTestCase();

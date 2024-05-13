@@ -1,21 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
-<suite name="Failed suite [DemoSuite]" guice-stage="DEVELOPMENT">
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite parallel="none" name="Failed suite [DemoSuite]" guice-stage="DEVELOPMENT">
+  <parameter name="password" value="admin123"/>
+  <parameter name="username" value="Admin"/>
   <listeners>
     <listener class-name="GlobalexceptionHandler.GlobalExceptionHandler"/>
-    <listener class-name="sampleTestNG.TestSuit.configurationsetup"/>
+    <listener class-name="ReusableMethods.ITestListnerClass"/>
+    <listener class-name="configClass.ConfigurationSetup"/>
   </listeners>
-  <test thread-count="5" name="OrangeHRMLogin(failed)">
+  <test parallel="none" name="OrangeHRMLogin(failed)">
     <parameter name="password" value="admin123"/>
     <parameter name="username" value="Admin"/>
     <classes>
-      <class name="sampleTestNG.TestSuit.PIMmodule">
+      <class name="sampleTestNG.TestSuit.PIMmodulePositiveTestCase">
         <methods>
-          <include name="AfterTestCompletion"/>
-          <include name="AddNewEmployee"/>
+          <include name="EmployeeInfoSearch"/>
+          <include name="EmployeeListTableDataStoring"/>
+          <include name="LoadApplication"/>
+          <include name="tearDown"/>
+        </methods>
+      </class> <!-- sampleTestNG.TestSuit.PIMmodulePositiveTestCase -->
+      <class name="sampleTestNG.TestSuit.PIMmoduleNegativeTestCase">
+        <methods>
+          <include name="tearDown"/>
           <include name="LoadApplication"/>
         </methods>
-      </class> <!-- sampleTestNG.TestSuit.PIMmodule -->
+      </class> <!-- sampleTestNG.TestSuit.PIMmoduleNegativeTestCase -->
     </classes>
   </test> <!-- OrangeHRMLogin(failed) -->
 </suite> <!-- Failed suite [DemoSuite] -->

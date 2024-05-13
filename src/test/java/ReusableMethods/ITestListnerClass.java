@@ -10,7 +10,8 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 
 public class ITestListnerClass implements ITestListener {
-	TakeScreenShotClass takeScreenShotClass	=  new TakeScreenShotClass(null);
+	
+	TakeScreenConfigShotClass takeScreenShotClass	=  new TakeScreenConfigShotClass();
 
 	public void onTestStart(ITestResult result) {
 		System.out.println("onTestStart...");
@@ -22,7 +23,7 @@ public class ITestListnerClass implements ITestListener {
 
 	public void onTestFailure(ITestResult result) {
 		System.out.println("onTestFailure...");
-		takeScreenShotClass.captureScreenshot("Failed_Screenshot_"+result.getName());
+		//takeScreenShotClass.captureScreenshot("Failed_Screenshot_"+result.getName());
 	}
 
 	public void onTestSkipped(ITestResult result) {

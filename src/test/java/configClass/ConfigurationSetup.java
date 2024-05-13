@@ -1,4 +1,4 @@
-package sampleTestNG.TestSuit;
+package configClass;
 
 import org.testng.annotations.Test;
 
@@ -6,6 +6,7 @@ import com.aventstack.extentreports.Status;
 
 import ReportGeneration.ReportGenerationClass;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import sampleTestNG.TestSuit.OrangeHRMPIMElementLocators;
 
 import java.util.List;
 
@@ -16,23 +17,51 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.safari.SafariDriver;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
-import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeSuite;
-import org.testng.annotations.Parameters;
 
-public class configurationsetup implements ITestListener{
-	public static WebDriver driver;
-	ReportGenerationClass reportGeneration = new ReportGenerationClass();
-	@BeforeClass
-	public WebDriver getDriver() throws Exception{
-		WebDriverManager.chromedriver().setup();
-		// Set any additional options if needed
-		driver = new ChromeDriver();
-		driver.manage().window().maximize();
+
+public class ConfigurationSetup implements ITestListener{
+    public ConfigurationSetup() {
+		super();
+	}
+	public WebDriver driver;
+
+    public ConfigurationSetup(String browser) {
+        switch (browser.toLowerCase()) {
+            case "chrome":
+                WebDriverManager.chromedriver().setup();
+                driver = new ChromeDriver();
+                driver.manage().window().maximize();
+                break;
+            case "firefox":
+                WebDriverManager.firefoxdriver().setup();
+                driver = new FirefoxDriver();
+                driver.manage().window().maximize();
+                break;
+            case "edge":
+                WebDriverManager.edgedriver().setup();
+                driver = new EdgeDriver();
+                driver.manage().window().maximize();
+                break;
+            case "safari":
+                WebDriverManager.safaridriver().setup();
+                driver = new SafariDriver();
+                driver.manage().window().maximize();
+                break;
+            default:
+                WebDriverManager.chromedriver().setup(); // Set default to Chrome
+                driver = new ChromeDriver();
+                driver.manage().window().maximize();
+                break;
+        }
+    }
+	public WebDriver getDriverConfiguration() throws Exception{
 		return driver;
 	}
 
@@ -97,34 +126,41 @@ public class configurationsetup implements ITestListener{
 	public void ExitBrowser() {
 		driver.close();
 	}
-	public void onFinish(ITestContext arg0) {
+	@Override
+	public void onTestStart(ITestResult result) {
 		// TODO Auto-generated method stub
-
+		
 	}
-	public void onStart(ITestContext arg0) {
+	@Override
+	public void onTestSuccess(ITestResult result) {
 		// TODO Auto-generated method stub
-
+		
 	}
-	public void onTestFailedButWithinSuccessPercentage(ITestResult arg0) {
+	@Override
+	public void onTestFailure(ITestResult result) {
 		// TODO Auto-generated method stub
-
+		
 	}
-	public void onTestFailure(ITestResult arg0) {
+	@Override
+	public void onTestSkipped(ITestResult result) {
 		// TODO Auto-generated method stub
-
+		
 	}
-	public void onTestSkipped(ITestResult arg0) {
+	@Override
+	public void onTestFailedButWithinSuccessPercentage(ITestResult result) {
 		// TODO Auto-generated method stub
-
+		
 	}
-	public void onTestStart(ITestResult arg0) {
+	@Override
+	public void onStart(ITestContext context) {
 		// TODO Auto-generated method stub
-
+		
 	}
-	public void onTestSuccess(ITestResult arg0) {
+	@Override
+	public void onFinish(ITestContext context) {
 		// TODO Auto-generated method stub
-
+		
 	}
-
+	
 
 }

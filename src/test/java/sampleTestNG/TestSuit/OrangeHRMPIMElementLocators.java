@@ -13,6 +13,7 @@ public class OrangeHRMPIMElementLocators {
 	 public static final String PimNavBar="//nav[@role='navigation' and @aria-label='Topbar Menu']";
 	 public static final String SideNaviationAllOptions="//*[@class='oxd-main-menu']";
 	 public static final String FirstNameTextBox="//input[@name=\"firstName\"]";
+	 public static final String MiddleNameTextBox="//input[@name=\"middleName\"]";
 	 public static final String LastNameTextBox="//input[@name=\"lastName\"]";
 	 public static final String EmployeeIdTextBox="//div[@class='oxd-input-group__label-wrapper']//following::input[@class=\"oxd-input oxd-input--active\"]";
 	 public static final String UserNameTextBox="//label[text()='Username']//following::input[1]";
@@ -35,4 +36,6 @@ public class OrangeHRMPIMElementLocators {
 	 public static final String TableEmployeeListHeadLine="//div[@role='table']//following::div[1][@role='row']";
 	 public static final String TableEmployeeListData="//div[@class='oxd-table-body' and @role='rowgroup']";
 
+	 //PIMmodule class Elements Locators EmployeeList
+	 public static final String AddEmployeeButton="//button[@type='button' and text()=' Add ']";
 }

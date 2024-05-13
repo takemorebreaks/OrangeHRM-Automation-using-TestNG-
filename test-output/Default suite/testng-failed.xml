@@ -5,6 +5,7 @@
     <classes>
       <class name="sampleTestNG.TestSuit.PIMmodulePositiveTestCase">
         <methods>
+          <include name="EmployeeInfoSearch"/>
           <include name="EmployeeListTableDataStoring"/>
           <include name="LoadApplication"/>
           <include name="tearDown"/>

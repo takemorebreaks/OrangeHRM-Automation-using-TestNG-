@@ -11,7 +11,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.BeforeClass;
 
 import GlobalexceptionHandler.NoSuchElementException;
-import sampleTestNG.TestSuit.configurationsetup;
+
 
 public class DropDownListOptionSelection {
 	String expectedResult2 = "Automaton Tester";
@@ -21,9 +21,9 @@ public class DropDownListOptionSelection {
 	    // Locate the dropdown element
 	    WebElement dropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(dropdownXPath)));
 	    dropdown.click();
-	    Thread.sleep(5000); // Wait for the dropdown options to load
+	    Thread.sleep(2000); // Wait for the dropdown options to load
 	    List<WebElement> optionElements = driver.findElements(By.cssSelector(".oxd-select-option > span"));
-	    Thread.sleep(5000);
+	    Thread.sleep(2000);
 	    System.out.println("List Size : "+optionElements.size());
 	    boolean found = false; // Flag to track if a matching option is found
 	    for (WebElement optionElement : optionElements) {
@@ -48,7 +48,6 @@ public class DropDownListOptionSelection {
 
 	    // Get all the options in the dropdown
 	    java.util.List<WebElement> optionElements = dropdown.findElements(By.tagName("option"));
-
 
 	    Thread.sleep(5000);
 	    System.out.println("List Size : "+optionElements.size());

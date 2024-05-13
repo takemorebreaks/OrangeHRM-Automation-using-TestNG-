@@ -1,5 +1,7 @@
 package ReportGeneration;
 
+import java.io.File;
+
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
@@ -11,42 +13,40 @@ import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 
 import ModelclassForDataStoring.ExtentReportModel;
-import sampleTestNG.TestSuit.configurationsetup;
+import ReusableMethods.TakeScreenConfigShotClass;
+
 
 
 public class ReportGenerationClass {
-	  private static ExtentReports extentReports;
-	    private static final String DEFAULT_FILE_PATH = "C:\\Users\\Palnar\\Downloads\\mailvalidation\\OrangeHRMTestNG\\Screenshots";
-
+	    private static ExtentReports extentReports;
+	    public TakeScreenConfigShotClass screenConfig = new TakeScreenConfigShotClass();
+	   // private static final String DEFAULT_FILE_PATH = "C:\\Users\\Palnar\\Downloads\\mailvalidation\\OrangeHRMTestNG\\Screenshots";
 	    // Private constructor to prevent instantiation
 	    public ReportGenerationClass() {}
-
 	    // Initialize ExtentReports instance
-	    public static void initializeReports(String filePath) {
-	        if (filePath == null || filePath.isEmpty()) {
-	            filePath = DEFAULT_FILE_PATH;
+	    public  void initializeReports(String CustomefilePath) {
+	        if (CustomefilePath == null || CustomefilePath.isEmpty()) {
+	        	File filePath = screenConfig.screenshotsFolder;
+	        	 extentReports = new ExtentReports();
+	 	        extentReports.attachReporter(new ExtentSparkReporter(filePath));
 	        }
-	        extentReports = new ExtentReports();
-	        extentReports.attachReporter(new ExtentSparkReporter(filePath));
+	        else {
+	       	 extentReports = new ExtentReports();
+	 	        extentReports.attachReporter(new ExtentSparkReporter(CustomefilePath));
+	        }
+	       
 	    }
 
 	    // Create a test and return the ExtentTest instance
-	    public static ExtentTest createTest(String testName) {
+	    public  ExtentTest createTest(String testName) {
 	        return extentReports.createTest(testName);
 	    }
 
-//	    // Log information to the test
-//	    public static void logInfo(ExtentTest test, String logMessage) {
-//	        test.log(Status.INFO, logMessage);
-//	    }
-//
-//	    // Mark the test as passed
-//	    public static void passTest(ExtentTest test) {
-//	        test.pass("Test Passed");
-//	    }
+
 
 	    // Flush the ExtentReports instance
 	    public static void flushReports() {
-	        extentReports.flush();
+	       
+		  extentReports.flush();
 	    }
 	}

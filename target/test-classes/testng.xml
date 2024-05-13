@@ -7,23 +7,15 @@
 			class-name="GlobalexceptionHandler.GlobalExceptionHandler" />
 			<listener class-name="ReusableMethods.ITestListnerClass"/>
 		<listener
-			class-name="sampleTestNG.TestSuit.configurationsetup" />
+			class-name="configClass.ConfigurationSetup"/>
 	</listeners>
 
 	<test thread-count="5" name="OrangeHRMLogin">
 		<parameter name="username" value="Admin" />
 		<parameter name="password" value="admin123" />
 		<classes>
-			<class name="sampleTestNG.TestSuit.FirstTest">
-				<methods>
-					<include name="LeaveApplication"></include>
-				</methods>
-			</class>
-			<class name="sampleTestNG.TestSuit.PIMmodule">
-				<methods>
-					<include name="AddNewEmployee"></include>
-				</methods>
-			</class>
+			<class name="sampleTestNG.TestSuit.PIMmodulePositiveTestCase"/>
+		    <class name="sampleTestNG.TestSuit.PIMmoduleNegativeTestCase"/>
 		</classes>
 	</test> <!-- Test -->
 </suite> <!-- Suite -->
